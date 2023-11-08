@@ -91,7 +91,7 @@ function main (){
     fi
 
     # Gets all storage info for root drive
-    HDDinfo=$(df -h / | tr " " "\n")
+    HDDinfo=$(df -h /System/Volumes/Data | tr " " "\n")
     i=0
     for part in $HDDinfo; do
         ((i++))
@@ -102,6 +102,14 @@ function main (){
             15) echo "Usage percent: $part" ;;
         esac
     done
+
+    #Check connectivity to EDR (Endpoint Detection and Response) [Added 11/6/23]
+    EDRStatus=$(mdatp connectivity test)
+    if [ $? -ne 0 ]; then
+        printf "\n$FAIL EDR Status"
+    else 
+        printf "\n$SUCCESS EDR Status" 
+    fi
 }
 
 bash_output=$(main)
